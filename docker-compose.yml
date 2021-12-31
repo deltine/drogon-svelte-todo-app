@@ -1,0 +1,128 @@
+version: "3.9"
+
+# volumes:
+#   sessions:
+
+services:
+
+  app:
+    container_name: d-app
+    build:
+      context: .
+      dockerfile: ./infra/docker/c++/Dockerfile
+    ports:
+        #drogon
+      - target: 80
+        published: ${APP_PORT:-8080}
+        protocol: tcp
+        mode: host
+        # svelte
+      - target: 5000
+        published: 5000
+        protocol: tcp
+        mode: host
+      - target: 35729
+        published: 35729
+        protocol: tcp
+        mode: host
+    tty: true
+    environment:
+      CHOKIDAR_USEPOLLING: 1
+    # to use gdb
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - seccomp:unconfined
+    volumes:
+      - type: bind
+        source: .
+        target: /workspace
+
+  # db:
+  #   container_name: d-db
+  #   build:
+  #     context: .
+  #     dockerfile: ./infra/docker/mysql/Dockerfile
+  #   ports:
+  #     - target: 3306
+  #       published: ${DB_PORT:-3306}
+  #       protocol: tcp
+  #       mode: host
+  #   volumes:
+  #     - type: bind
+  #       source: ./infra/docker/mysql/conf.d
+  #       target: /etc/mysql/conf.d
+  #     - type: bind
+  #       source: ./infra/volumes/db/data
+  #       target: /var/lib/mysql
+  #       volume:
+  #         nocopy: true
+  #     - type: bind
+  #       source: ./log/mysql
+  #       target: /var/log/mysql
+  #   environment:
+  #     - MYSQL_DATABASE=${DB_NAME:-mydb}
+  #     - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASS:-password}
+  #     - MYSQL_USER=${DB_USER:-user}
+  #     - MYSQL_PASSWORD=${DB_PASS:-password}
+
+  # phpmyadmin:
+  #   container_name: d-phpmyadmin
+  #   build:
+  #     context: .
+  #     dockerfile: ./infra/docker/phpmyadmin/Dockerfile
+  #   ports:
+  #     - ${PHP_MY_ADMIN_PORT:-8081}:80
+  #   environment:
+  #     - PMA_ARBITRARY=1
+  #     - PMA_HOST=db
+  #     - PMA_USER=root
+  #     - PMA_PASSWORD=${DB_ROOT_PASS:-password}
+  #   volumes:
+  #     - type: volume
+  #       source: sessions
+  #       target: /sessions
+  #       volume:
+  #         nocopy: true
+
+  # mailhog:
+  #   image: mailhog/mailhog:latest
+  #   container_name: laraec-mailhog
+  #   ports:
+  #     - 8025:8025
+  #     - 25:1025
+
+  # s3:
+  #   container_name: d-s3
+  #   build:
+  #     context: .
+  #     dockerfile: ./infra/docker/s3/Dockerfile
+  #   ports:
+  #       - ${S3_PORT:-9090}:9000
+  #       - 9001:9001
+  #   entrypoint: bash
+  #   command: -c "/opt/bin/minio server /data --console-address :9001"
+  #   environment:
+  #     MINIO_ROOT_USER: ${S3_ROOT_USER:-minio}
+  #     MINIO_ROOT_PASSWORD: ${S3_ROOT_PASSWORD:-password}
+  #   volumes:
+  #     - type: bind
+  #       source: ./infra/volumes/s3/data
+  #       target: /data
+
+  # awscli:
+  #   container_name: d-awscli
+  #   build:
+  #     context: .
+  #     dockerfile: ./infra/docker/awscli/Dockerfile
+  #   tty: true
+  #   environment:
+  #     AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION:-ap-northeast-1}
+  #     AWS_DEFAULT_OUTPUT: json
+  #     AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-access_key}
+  #     AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-secret_key}
+  #   volumes:
+  #     - type: volume
+  #       source: aws_data
+  #       target: /aws
+  #   working_dir: /aws
