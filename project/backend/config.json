@@ -42,27 +42,28 @@
             ]
         }
     ],
+    */
     "db_clients": [
         {
             //name: Name of the client,'default' by default
             //"name":"",
             //rdbms: Server type, postgresql,mysql or sqlite3, "postgresql" by default
-            "rdbms": "postgresql",
+            "rdbms": "mysql",
             //filename: Sqlite3 db file name
             //"filename":"",
             //host: Server address,localhost by default
-            "host": "127.0.0.1",
+            "host": "db",
             //port: Server port, 5432 by default
-            "port": 5432,
+            "port": 3306,
             //dbname: Database name
-            "dbname": "test",
+            "dbname": "mydb",
             //user: 'postgres' by default
-            "user": "",
+            "user": "root",
             //passwd: '' by default
-            "passwd": "",
+            "passwd": "password",
             //is_fast: false by default, if it is true, the client is faster but user can't call
             //any synchronous interface of it.
-            "is_fast": false,
+            "is_fast": true,
             //client_encoding: The character set used by the client. it is empty string by default which 
             //means use the default character set.
             //"client_encoding": "",
@@ -74,6 +75,7 @@
             "timeout": -1.0
         }
     ],
+    /*
     "redis_clients": [
         {
             //name: Name of the client,'default' by default
@@ -102,7 +104,7 @@
         //is the number of CPU cores
         "number_of_threads": 1,
         //enable_session: False by default
-        "enable_session": false,
+        "enable_session": true,
         "session_timeout": 0,
         //document_root: Root path of HTTP document, defaut path is ./
         "document_root": "./",

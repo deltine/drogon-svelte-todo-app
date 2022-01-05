@@ -1,13 +1,31 @@
 cmake_minimum_required(VERSION 3.5)
 project(backend CXX)
 
-set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
+#CMAKE_CXX_FLAGS
+set(CMAKE_CXX_FLAGS "-std=c++20 -fcoroutines")
+# set(CMAKE_CXX_STANDARD 20)
+
+# static-libをbuildに含める設定
+# set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
 
 include(CheckIncludeFileCXX)
 
 check_include_file_cxx(any HAS_ANY)
 check_include_file_cxx(string_view HAS_STRING_VIEW)
 check_include_file_cxx(coroutine HAS_COROUTINE)
+
+if (HAS_ANY)
+    message(STATUS "found HAS_ANY")
+endif ()
+
+if (HAS_STRING_VIEW)
+    message(STATUS "found HAS_STRING_VIEW")
+endif ()
+
+if (HAS_COROUTINE)
+    message(STATUS "found HAS_COROUTINE")
+endif ()
+
 if (NOT "${CMAKE_CXX_STANDARD}" STREQUAL "")
     # Do nothing
 elseif (HAS_ANY AND HAS_STRING_VIEW AND HAS_COROUTINE)
@@ -19,7 +37,7 @@ else ()
 endif ()
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_CXX_EXTENSIONS ON)
 
 add_executable(${PROJECT_NAME} main.cc)
 

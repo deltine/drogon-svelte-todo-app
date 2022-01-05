@@ -16,8 +16,9 @@ Options:
   create-controller|cc      コントローラーを作成します。
   create-web-socket|cw      WebSocketコントローラーを作成します。
   create-filters|cf         フィルターを作成します。
-  --version, -v     バージョンを表示します。
-  --help, -h        ヘルプを表示します。
+  create-model|cm           モデルを作成します。
+  --version, -v             バージョンを表示します。
+  --help, -h                ヘルプを表示します。
 EOF
 };
 
@@ -71,6 +72,12 @@ case ${1} in
         # example
         # dg_ctl create controller -h app::web::LoginFilter
         dg_ctl create filter ${2}
+    ;;
+
+    create-model|cm)
+        # example
+        # dg_ctl create model -h app::web::LoginFilter
+        dg_ctl create model ./models
     ;;
 
     dg_ctl-version|dv)

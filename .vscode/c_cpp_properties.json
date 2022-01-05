@@ -4,12 +4,12 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/usr/include/jsoncpp/**"
+                "/usr/include/jsoncpp"
             ],
             "defines": [],
-            "compilerPath": "/usr/bin/gcc-10",
+            "compilerPath": "/usr/bin/gcc-11",
             "cStandard": "gnu17",
-            "cppStandard": "gnu++14",
+            "cppStandard": "gnu++20",
             "intelliSenseMode": "linux-gcc-x64",
             "configurationProvider": "ms-vscode.cmake-tools"
         }

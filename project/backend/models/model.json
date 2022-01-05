@@ -1,20 +1,20 @@
 {
     //rdbms: server type, postgresql,mysql or sqlite3
-    "rdbms": "postgresql",
+    "rdbms": "mysql",
     //filename: sqlite3 db file name
     //"filename":"",
     //host: server address,localhost by default;
-    "host": "127.0.0.1",
+    "host": "db",
     //port: server port, 5432 by default;
-    "port": 5432,
+    "port": 3306,
     //dbname: Database name;
-    "dbname": "",
+    "dbname": "mydb",
     //schema: valid for postgreSQL, "public" by default;
     "schema": "public",
     //user: User name
-    "user": "",
+    "user": "root",
     //password or passwd: Password
-    "password": "",
+    "password": "password",
     //client_encoding: The character set used by drogon_ctl. it is empty string by default which 
     //means use the default character set.
     //"client_encoding": "",
@@ -23,58 +23,62 @@
     //convert: the value can be changed by a function call before it is stored into database or
     //after it is read from database
     "convert": {
-      "enabled": false,
-      "items":[{
-          "table": "user",
-          "column": "password",
-          "method": {
-            //after_db_read: name of the method which is called after reading from database, signature: void([const] std::shared_ptr [&])
-            "after_db_read": "decrypt_password",
-            //before_db_write: name of the method which is called before writing to database, signature: void([const] std::shared_ptr [&])
-            "before_db_write": "encrypt_password"
-          },
-          "includes": [
-            "\"file_local_search_path.h\"","<file_in_global_search_path.h>"
-          ]
-      }]
+        "enabled": false,
+        "items": [
+            {
+                "table": "user",
+                "column": "password",
+                "method": {
+                    //after_db_read: name of the method which is called after reading from database, signature: void([const] std::shared_ptr [&])
+                    "after_db_read": "decrypt_password",
+                    //before_db_write: name of the method which is called before writing to database, signature: void([const] std::shared_ptr [&])
+                    "before_db_write": "encrypt_password"
+                },
+                "includes": [
+                    "\"file_local_search_path.h\"",
+                    "<file_in_global_search_path.h>"
+                ]
+            }
+        ]
     },
     "relationships": {
-        "enabled": false,
-        "items": [{
-                "type": "has one",
-                "original_table_name": "products",
-                "original_table_alias": "product",
-                "original_key": "id",
-                "target_table_name": "skus",
-                "target_table_alias": "SKU",
-                "target_key": "product_id",
-                "enable_reverse": true
-            },
+        "enabled": true,
+        "items": [
+            // {
+            //     "type": "has one",
+            //     "original_table_name": "products",
+            //     "original_table_alias": "product",
+            //     "original_key": "id",
+            //     "target_table_name": "skus",
+            //     "target_table_alias": "SKU",
+            //     "target_key": "product_id",
+            //     "enable_reverse": true
+            // },
             {
                 "type": "has many",
-                "original_table_name": "products",
-                "original_table_alias": "product",
-                "original_key": "id",
-                "target_table_name": "reviews",
+                "original_table_name": "account",
+                "original_table_alias": "account",
+                "original_key": "account_id",
+                "target_table_name": "todo_task",
                 "target_table_alias": "",
-                "target_key": "product_id",
-                "enable_reverse": true
-            },
-            {
-                "type": "many to many",
-                "original_table_name": "products",
-                "original_table_alias": "",
-                "original_key": "id",
-                "pivot_table": {
-                    "table_name": "carts_products",
-                    "original_key": "product_id",
-                    "target_key": "cart_id"
-                },
-                "target_table_name": "carts",
-                "target_table_alias": "",
-                "target_key": "id",
+                "target_key": "account_id",
                 "enable_reverse": true
             }
+            // {
+            //     "type": "many to many",
+            //     "original_table_name": "products",
+            //     "original_table_alias": "",
+            //     "original_key": "id",
+            //     "pivot_table": {
+            //         "table_name": "carts_products",
+            //         "original_key": "product_id",
+            //         "target_key": "cart_id"
+            //     },
+            //     "target_table_name": "carts",
+            //     "target_table_alias": "",
+            //     "target_key": "id",
+            //     "enable_reverse": true
+            // }
         ]
     },
     "restful_api_controllers": {
@@ -94,7 +98,7 @@
             //name: Name of the client,'default' by default
             "name": "default",
             //is_fast: 
-            "is_fast": false
+            "is_fast": true
         },
         // directory: The directory where the controller source files are stored.
         "directory": "controllers",
