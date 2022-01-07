@@ -63,7 +63,7 @@
             "passwd": "password",
             //is_fast: false by default, if it is true, the client is faster but user can't call
             //any synchronous interface of it.
-            "is_fast": true,
+            "is_fast": false,
             //client_encoding: The character set used by the client. it is empty string by default which 
             //means use the default character set.
             //"client_encoding": "",
@@ -161,7 +161,7 @@
                 //The default value is "" which means use the document root path as the location base path.
                 "alias": "",
                 //is_case_sensitive: indicates whether the URI prefix is case sensitive.
-                "is_case_sensitive": false,
+                "is_case_sensitive": true,
                 //allow_all: true by default. If it is set to false, only static files with a valid extension can be accessed.
                 "allow_all": true,
                 //is_recursive: true by default. If it is set to false, files in sub directories can't be accessed.

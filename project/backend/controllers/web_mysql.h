@@ -1,5 +1,7 @@
 #pragma once
 #include <drogon/HttpController.h>
+#include <drogon/IOThreadStorage.h>
+
 using namespace drogon;
 namespace web
 {
@@ -7,7 +9,10 @@ namespace web
     {
     public:
         METHOD_LIST_BEGIN
-        METHOD_ADD(Mysql::select, "/select", Get);
+        METHOD_ADD(Mysql::selectA, "/selectA", Get);
+        METHOD_ADD(Mysql::selectCoro, "/selectCoro", Get);
+        METHOD_ADD(Mysql::selectFast, "/selectFast", Get);
+        METHOD_ADD(Mysql::selectMapper, "/selectMapper", Get);
         METHOD_ADD(Mysql::select2, "/select2", Get);
         METHOD_ADD(Mysql::select3, "/select3", Get);
         METHOD_ADD(Mysql::insert, "/insert", Get);
@@ -18,8 +23,14 @@ namespace web
         METHOD_ADD(Mysql::del2, "/del2", Get);
         METHOD_LIST_END
 
-        void select(const HttpRequestPtr &req,
-                    std::function<void(const HttpResponsePtr &)> &&callback);
+        void selectA(const HttpRequestPtr &req,
+                     std::function<void(const HttpResponsePtr &)> &&callback);
+        void selectCoro(const HttpRequestPtr &req,
+                        std::function<void(const HttpResponsePtr &)> &&callback);
+        void selectFast(const HttpRequestPtr &req,
+                        std::function<void(const HttpResponsePtr &)> &&callback);
+        void selectMapper(const HttpRequestPtr &req,
+                          std::function<void(const HttpResponsePtr &)> &&callback);
         void select2(const HttpRequestPtr &req,
                      std::function<void(const HttpResponsePtr &)> &&callback);
         void select3(const HttpRequestPtr &req,
@@ -36,5 +47,8 @@ namespace web
                  std::function<void(const HttpResponsePtr &)> &&callback);
         void del2(const HttpRequestPtr &req,
                   std::function<void(const HttpResponsePtr &)> &&callback);
+
+    private:
+        IOThreadStorage<orm::DbClientPtr> _dbClient;
     };
 }
