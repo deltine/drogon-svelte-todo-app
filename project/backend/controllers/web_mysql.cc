@@ -6,6 +6,7 @@
 #include "web_mysql.h"
 #include "models/Account.h"
 #include "models/TodoTask.h"
+#include "logic/web_mysql/selectCallBack.h"
 
 using namespace drogon;
 using namespace drogon::orm;
@@ -294,147 +295,107 @@ void Mysql::selectMapper(const HttpRequestPtr &req,
     }
 }
 
-const void testFunc(Account w)
+// void testFunc(const Result &r)
+// {
+//     LOG_DEBUG << "testFunc";
+// }
+
+/**
+ * @brief shared_ptrの仕様確認
+ * shared_ptrは各スレッドで独立している。85ms
+ *
+ * @param req
+ * @param callback
+ */
+void Mysql::selectCallBack(const HttpRequestPtr &req,
+                           std::function<void(const HttpResponsePtr &)> &&callback)
 {
-}
+    LOG_DEBUG << "selectCallBack call";
 
-void Mysql::select2(const HttpRequestPtr &req,
-                    std::function<void(const HttpResponsePtr &)> &&callback)
-{
-    LOG_DEBUG << "select2 call";
+    static std::once_flag once;
+    std::call_once(once, []()
+                   { srand(time(NULL)); });
+    int queries = 5;
+    auto &parameter = req->getParameter("queries");
+    if (!parameter.empty())
+    {
+        queries = atoi(parameter.c_str());
+        if (queries > 500)
+            queries = 500;
+        else if (queries < 1)
+            queries = 1;
+    }
+    auto json = std::make_shared<Json::Value>();
+    json->resize(0);
+    auto callbackPtr =
+        std::make_shared<std::function<void(const HttpResponsePtr &)>>(
+            std::move(callback));
 
-    // // コルーチンの呼び出し
-    // auto g = iota(10);
-    // for (int v : g)
-    // {
-    //     std::cout << v;
-    // }
-    // auto clientPtr = app().getFastDbClient();
-    // try
-    // {
-    //     auto result = co_await clientPtr->execSqlCoro(Account::sqlForFindingByPrimaryKey());
-    //     result.await_resume();
-    //     size_t num_users = result[0][0].as<size_t>();
-    //     auto resp = HttpResponse::newHttpResponse();
-    //     resp->setBody(std::to_string(num_users));
-    //     callback(resp);
-    // }
-    // catch (const DrogonDbException &err)
-    // {
-    //     // Exception works as sync interfaces.
-    //     auto resp = HttpResponse::newHttpResponse();
-    //     resp->setBody(err.base().what());
-    //     callback(resp);
-    // }
+    _callbackPtr = std::make_shared<std::function<void(const HttpResponsePtr &)>>(
+        std::move(callback));
 
-    // co_return;
+    auto counterMax = std::make_shared<int>(queries);
+    auto counter = std::make_shared<int>(queries);
+    auto a = counter.get();
 
-    // Mapper<Account> mp(clientPtr);
-    // mp.findByPrimaryKey(
-    //     6,
-    //     [](Account a)
-    //     {
-    //         LOG_DEBUG << "accountid: " << *a.getAccountId()
-    //                   << " account_name: " << *a.getAccountName();
-    //     },
-    //     [](const DrogonDbException &e)
-    //     {
-    //         LOG_ERROR << "error:" << e.base().what();
-    //     });
+    int testCount = 0;
+    auto sTestCount = std::make_shared<int>(testCount);
 
-    // auto a = mp.findByPrimaryKey(6);
-    // LOG_DEBUG << "accountid: " << *a.getAccountId()
-    //           << " account_name: " << *a.getAccountName();
+    if (!*_dbClient)
+    {
+        *_dbClient = drogon::app().getFastDbClient();
+    }
+    drogon::orm::Mapper<Account> mapper(*_dbClient);
 
-    // auto clientPtr = app().getFastDbClient();
-    // try
-    // {
-    //     auto res = clientPtr->execSqlAsync(Account::sqlForFindingByPrimaryKey(), 6);
+    auto db = drogon::app().getFastDbClient();
 
-    //     for (auto len : res.get())
-    //     {
-    //         auto a = Account(len);
-    //         LOG_DEBUG << "accountid: " << *a.getAccountId()
-    //                   << " account_name: " << *a.getAccountName();
-    //     }
-    // }
-    // catch (const DrogonDbException &e)
-    // {
-    //     std::cerr << "error:" << e.base().what() << std::endl;
-    // }
+    auto success = [callbackPtr, counter, json](const Result &r) mutable
+    {
+        if (*counter <= 0)
+            return;
+        if (r.size() > 0)
+        {
+            auto w = Account(r[0]);
+            json->append(w.toJson());
+            (*counter)--;
+            if ((*counter) == 0)
+            {
+                (*callbackPtr)(HttpResponse::newHttpJsonResponse(
+                    std::move(*json)));
+            }
+        }
+        else
+        {
+            *counter = -1;
+            Json::Value json{};
+            json["code"] = 0;
+            json["message"] = "Internal error";
+            (*callbackPtr)(
+                HttpResponse::newHttpJsonResponse(std::move(json)));
+        }
+    };
 
-    // auto clientPtr = app().getFastDbClient();
-    // Mapper<Account> mp(clientPtr);
-    // // LOG_DEBUG << "count: " << mp.count();
-    // // auto f = clientPtr->execSqlAsync(R"(select * from account)");
-    // // LOG_DEBUG << "count: " << mp.countFuture();
-    // Account::sqlForFindingByPrimaryKey();
-    // auto ac = new Account();
-    // ac->sqlForFindingByPrimaryKey(clientPtr);
-    // ac->getTask(
-    //     clientPtr,
-    //     [](const std::vector<Task> &r)
-    //     {
-    //         int i = 0;
-    //         for (auto row : r)
-    //         {
-    //             LOG_DEBUG << "accountid: " << *row.getTaskId()
-    //                       << " account_name: " << *row.getTitle();
-    //         }
-    //     },
-    //     [](const drogon::orm::ExceptionCallback &ecb)
-    //     {
-    //         // LOG_ERROR << "error:" << ecb.target();
-    //     });
-    // try
-    // {
-    //     // auto res = mp.findFutureAll();
+    auto error = [callbackPtr, counter](const DrogonDbException &e)
+    {
+        if (*counter <= 0)
+            return;
+        *counter = -1;
+        Json::Value json{};
+        json["code"] = 1;
+        json["message"] = e.base().what();
+        auto resp = HttpResponse::newHttpJsonResponse(std::move(json));
+        (*callbackPtr)(resp);
+    };
 
-    //     for (auto row : f.get())
-    //     {
-    //         auto a = Account(row);
-    //         LOG_DEBUG << "accountid: " << *a.getAccountId()
-    //                   << " account_name: " << *a.getAccountName();
-    //     }
-    // }
-    // catch (const DrogonDbException &e)
-    // {
-    //     std::cerr << "error:" << e.base().what() << std::endl;
-    // }
-
-    Json::Value ret;
-    ret["result"] = "select2 ok";
-    ret["token"] = drogon::utils::getUuid();
-    auto resp = HttpResponse::newHttpJsonResponse(ret);
-    callback(resp);
-}
-
-void Mysql::select3(const HttpRequestPtr &req,
-                    std::function<void(const HttpResponsePtr &)> &&callback)
-{
-    LOG_DEBUG << "select3 call";
-
-    // auto clientPtr = app().getFastDbClient();
-    // auto res = clientPtr->execSqlSync(R"(select * from account)");
-    // try
-    // {
-    //     for (auto len : res)
-    //     {
-    //         auto a = Account(len);
-    //         LOG_DEBUG << "accountid: " << *a.getAccountId()
-    //                   << " account_name: " << *a.getAccountName();
-    //     }
-    // }
-    // catch (const DrogonDbException &e)
-    // {
-    //     std::cerr << "error:" << e.base().what() << std::endl;
-    // }
-
-    Json::Value ret;
-    ret["result"] = "select3 ok";
-    ret["token"] = drogon::utils::getUuid();
-    auto resp = HttpResponse::newHttpJsonResponse(ret);
-    callback(resp);
+    for (int i = 0; i < queries; i++)
+    {
+        int id = rand() % 3 + 1;
+        *db << R"(select * from account where account_id=?)" << id
+            // >> success
+            >> selectCallBackSuccess{callbackPtr, counter, json}
+            // >> Mysql::selectCallBackSuccess
+            >> error;
+    }
 }
 
 void Mysql::insert(const HttpRequestPtr &req,

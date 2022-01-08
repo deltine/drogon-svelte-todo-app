@@ -3,6 +3,7 @@
 #include <drogon/IOThreadStorage.h>
 
 using namespace drogon;
+using namespace drogon::orm;
 namespace web
 {
     class Mysql : public drogon::HttpController<Mysql>
@@ -13,8 +14,7 @@ namespace web
         METHOD_ADD(Mysql::selectCoro, "/selectCoro", Get);
         METHOD_ADD(Mysql::selectFast, "/selectFast", Get);
         METHOD_ADD(Mysql::selectMapper, "/selectMapper", Get);
-        METHOD_ADD(Mysql::select2, "/select2", Get);
-        METHOD_ADD(Mysql::select3, "/select3", Get);
+        METHOD_ADD(Mysql::selectCallBack, "/selectCallBack", Get);
         METHOD_ADD(Mysql::insert, "/insert", Get);
         METHOD_ADD(Mysql::insert2, "/insert2", Get);
         METHOD_ADD(Mysql::update, "/update", Get);
@@ -31,10 +31,8 @@ namespace web
                         std::function<void(const HttpResponsePtr &)> &&callback);
         void selectMapper(const HttpRequestPtr &req,
                           std::function<void(const HttpResponsePtr &)> &&callback);
-        void select2(const HttpRequestPtr &req,
-                     std::function<void(const HttpResponsePtr &)> &&callback);
-        void select3(const HttpRequestPtr &req,
-                     std::function<void(const HttpResponsePtr &)> &&callback);
+        void selectCallBack(const HttpRequestPtr &req,
+                            std::function<void(const HttpResponsePtr &)> &&callback);
         void insert(const HttpRequestPtr &req,
                     std::function<void(const HttpResponsePtr &)> &&callback);
         void insert2(const HttpRequestPtr &req,
@@ -50,5 +48,6 @@ namespace web
 
     private:
         IOThreadStorage<orm::DbClientPtr> _dbClient;
+        std::shared_ptr<drogon::AdviceCallback> _callbackPtr;
     };
 }
