@@ -1,30 +1,32 @@
-<script lang="ts">
-  export let name: string;
+<script>
+  import { Router, Link, Route } from "svelte-routing";
+  //   import { push } from "svelte-spa-router";
+  //   export let notes;
+  import Login from "./Login.svelte";
+  import Todo from "./Todo.svelte";
 </script>
 
-<main>
-  <h1>Helldssss {name}!</h1>
-  <p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
+<Router>
+  <nav>
+    <Link to="">login</Link>
+    <Link to="todo">todo</Link>
+  </nav>
+  <main>
+    <Route path="" component={Login} />
+    <Route path="todo" component={Todo} />
+  </main>
+</Router>
+
+<!-- <main>
+  <Home />
 </main>
 
 <style>
   main {
-    text-align: center;
-    padding: 1em;
-    max-width: 240px;
-    margin: 0 auto;
+    background-color: rgb(255, 251, 246);
+    padding: 2em;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
   }
-
-  h1 {
-    color: #ff3e00;
-    text-transform: uppercase;
-    font-size: 4em;
-    font-weight: 100;
-  }
-
-  @media (min-width: 640px) {
-    main {
-      max-width: none;
-    }
-  }
-</style>
+</style> -->

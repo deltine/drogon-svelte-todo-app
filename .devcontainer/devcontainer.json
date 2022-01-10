@@ -21,7 +21,7 @@
 	"extensions": [
 		"ms-vscode.cpptools-extension-pack",
 		"go2sh.cmake-integration-vscode",
-		"eamodio.gitlens",
+		// "eamodio.gitlens",
 		"svelte.svelte-vscode",
 		"ardenivanov.svelte-intellisense",
 		"fivethree.vscode-svelte-snippets",

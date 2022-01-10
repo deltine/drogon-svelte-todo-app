@@ -4,7 +4,8 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/usr/include/jsoncpp"
+                "/usr/include/jsoncpp",
+                "${workspaceFolder}/project/backend"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc-11",

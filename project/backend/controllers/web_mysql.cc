@@ -152,6 +152,9 @@ void Mysql::selectFast(const HttpRequestPtr &req,
 {
     LOG_DEBUG << "selectFast call";
 
+    auto cookies = req->getCookies();
+    LOG_DEBUG << "coolie: " << cookies["test"];
+
     static std::once_flag once;
     std::call_once(once, []()
                    { srand(time(NULL)); });
@@ -200,8 +203,9 @@ void Mysql::selectFast(const HttpRequestPtr &req,
                     (*counter)--;
                     if ((*counter) == 0)
                     {
-                        (*callbackPtr)(HttpResponse::newHttpJsonResponse(
-                            std::move(*json)));
+                        auto response = HttpResponse::newHttpJsonResponse(std::move(*json));
+                        response->addCookie("test", "testVal");
+                        (*callbackPtr)(response);
                     }
                 }
                 else
@@ -495,4 +499,71 @@ void Mysql::del2(const HttpRequestPtr &req,
     ret["token"] = drogon::utils::getUuid();
     auto resp = HttpResponse::newHttpJsonResponse(ret);
     callback(resp);
+}
+
+void Mysql::tran(const HttpRequestPtr &req,
+                 std::function<void(const HttpResponsePtr &)> &&callback)
+{
+    auto clientPtr = app().getFastDbClient();
+    // auto clientPtr = app().getDbClient();
+
+    // auto callbackPtr =
+    //     std::make_shared<std::function<void(const HttpResponsePtr &)>>(
+    //         std::move(callback));
+
+    clientPtr->newTransactionAsync(
+        [=, this](const std::shared_ptr<Transaction> &tran)
+        {
+            tran->execSqlAsync(
+                "select * from account where account_id=? for update",
+                [=, this](const Result &r)
+                {
+                    if (r.size() > 0)
+                    {
+                        LOG_DEBUG << "Got a task!";
+                        *tran << "update account set account_name = 'update' where account_id = ?;"
+                              << r[0]["account_id"].as<int64_t>() >>
+                            [=, this](const Result &r)
+                        {
+                            LOG_DEBUG << "Updated!";
+                            Json::Value ret;
+                            ret["result"] = "tran ok";
+                            ret["token"] = drogon::utils::getUuid();
+                            auto resp = HttpResponse::newHttpJsonResponse(ret);
+                            callback(resp);
+                        } >> [=, this](const DrogonDbException &e)
+                        {
+                            LOG_DEBUG << "Update dailed!";
+                            throw e;
+                            Json::Value ret;
+                            ret["result"] = "tran ng";
+                            ret["token"] = drogon::utils::getUuid();
+                            auto resp = HttpResponse::newHttpJsonResponse(ret);
+                            callback(resp);
+                        };
+                    }
+                    else
+                    {
+                        Json::Value ret;
+                        ret["result"] = "tran ng";
+                        ret["token"] = drogon::utils::getUuid();
+                        auto resp = HttpResponse::newHttpJsonResponse(ret);
+                        callback(resp);
+                    }
+                },
+                [callback](const DrogonDbException &e)
+                {
+                    LOG_DEBUG << "DrogonDbException!";
+                    Json::Value ret;
+                    ret["result"] = "tran ng";
+                    ret["token"] = drogon::utils::getUuid();
+                    auto resp = HttpResponse::newHttpJsonResponse(ret);
+                    callback(resp);
+                },
+                1);
+        });
+
+    // auto callbackPtr =
+    //     std::make_shared<std::function<void(const HttpResponsePtr &)>>(
+    //         std::move(callback));
 }

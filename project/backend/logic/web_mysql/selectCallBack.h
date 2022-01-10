@@ -1,6 +1,5 @@
 #pragma once
 #include <drogon/HttpController.h>
-#include <drogon/IOThreadStorage.h>
 #include "models/Account.h"
 
 using namespace drogon_model::mydb;

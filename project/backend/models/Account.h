@@ -45,6 +45,8 @@ class Account
     {
         static const std::string _account_id;
         static const std::string _account_name;
+        static const std::string _mail_address;
+        static const std::string _password;
     };
 
     const static int primaryKeyNumber;
@@ -114,8 +116,28 @@ class Account
     void setAccountName(std::string &&pAccountName) noexcept;
     void setAccountNameToNull() noexcept;
 
+    /**  For column mail_address  */
+    ///Get the value of the column mail_address, returns the default value if the column is null
+    const std::string &getValueOfMailAddress() const noexcept;
+    ///Return a shared_ptr object pointing to the column const value, or an empty shared_ptr object if the column is null
+    const std::shared_ptr<std::string> &getMailAddress() const noexcept;
+    ///Set the value of the column mail_address
+    void setMailAddress(const std::string &pMailAddress) noexcept;
+    void setMailAddress(std::string &&pMailAddress) noexcept;
+    void setMailAddressToNull() noexcept;
 
-    static size_t getColumnNumber() noexcept {  return 2;  }
+    /**  For column password  */
+    ///Get the value of the column password, returns the default value if the column is null
+    const std::string &getValueOfPassword() const noexcept;
+    ///Return a shared_ptr object pointing to the column const value, or an empty shared_ptr object if the column is null
+    const std::shared_ptr<std::string> &getPassword() const noexcept;
+    ///Set the value of the column password
+    void setPassword(const std::string &pPassword) noexcept;
+    void setPassword(std::string &&pPassword) noexcept;
+    void setPasswordToNull() noexcept;
+
+
+    static size_t getColumnNumber() noexcept {  return 4;  }
     static const std::string &getColumnName(size_t index) noexcept(false);
 
     Json::Value toJson() const;
@@ -137,6 +159,8 @@ class Account
     void updateId(const uint64_t id);
     std::shared_ptr<uint32_t> accountId_;
     std::shared_ptr<std::string> accountName_;
+    std::shared_ptr<std::string> mailAddress_;
+    std::shared_ptr<std::string> password_;
     struct MetaData
     {
         const std::string colName_;
@@ -148,7 +172,7 @@ class Account
         const bool notNull_;
     };
     static const std::vector<MetaData> metaData_;
-    bool dirtyFlag_[2]={ false };
+    bool dirtyFlag_[4]={ false };
   public:
     static const std::string &sqlForFindingByPrimaryKey()
     {
@@ -173,6 +197,16 @@ class Account
             sql += "account_name,";
             ++parametersCount;
         }
+        if(dirtyFlag_[2])
+        {
+            sql += "mail_address,";
+            ++parametersCount;
+        }
+        if(dirtyFlag_[3])
+        {
+            sql += "password,";
+            ++parametersCount;
+        }
         needSelection=true;
         if(parametersCount > 0)
         {
@@ -184,6 +218,16 @@ class Account
 
         sql +="default,";
         if(dirtyFlag_[1])
+        {
+            sql.append("?,");
+
+        }
+        if(dirtyFlag_[2])
+        {
+            sql.append("?,");
+
+        }
+        if(dirtyFlag_[3])
         {
             sql.append("?,");
 

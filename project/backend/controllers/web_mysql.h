@@ -21,6 +21,7 @@ namespace web
         METHOD_ADD(Mysql::update2, "/update2", Get);
         METHOD_ADD(Mysql::del, "/del", Get);
         METHOD_ADD(Mysql::del2, "/del2", Get);
+        METHOD_ADD(Mysql::tran, "/tran", Get);
         METHOD_LIST_END
 
         void selectA(const HttpRequestPtr &req,
@@ -44,6 +45,8 @@ namespace web
         void del(const HttpRequestPtr &req,
                  std::function<void(const HttpResponsePtr &)> &&callback);
         void del2(const HttpRequestPtr &req,
+                  std::function<void(const HttpResponsePtr &)> &&callback);
+        void tran(const HttpRequestPtr &req,
                   std::function<void(const HttpResponsePtr &)> &&callback);
 
     private:
