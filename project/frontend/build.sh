@@ -9,7 +9,8 @@ Usage:
 
 Options:
   install|i             Svelteをインストールします。
-  run                   フロントプロジェクト起動
+  run|r                 フロントプロジェクト起動
+  dark|d                テーマの更新
   newproject|new|n      新規プロジェクトを作成します。
   --version, -v         バージョンを表示します。
   --help, -h            ヘルプを表示します。
@@ -28,8 +29,12 @@ case ${1} in
         npm i
     ;;
 
-    run)
+    run|r)
         npm run dev
+    ;;
+
+    dark|d)
+        npm run prepare
     ;;
 
     help|--help|-h)

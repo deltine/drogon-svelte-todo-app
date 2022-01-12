@@ -1,9 +1,12 @@
 <script lang="ts">
-  import { Recaptcha, recaptcha, observer } from "svelte-recaptcha-v2";
+  // import { Button, Icon, Styles } from "sveltestrap";
+  import Textfield from "@smui/textfield";
+  import HelperText from "@smui/textfield/helper-text";
+  import Button, { Label } from "@smui/button";
+  import { push } from "svelte-spa-router";
 
   let mailAddress = "test@mail.jp";
   let password = "password";
-  let result = null;
 
   async function onSignIn() {
     const res = await fetch("http://localhost:8080/web/Account/signin", {
@@ -15,23 +18,44 @@
     });
 
     const json = await res.json();
-    result = JSON.stringify(json);
+    // console.log("res" + json["res"]);
+    if (json["res"] == "1") {
+      // console.log("success");
+      push("/todo");
+    }
+
+    // state = State.requesting;
+    // doRecaptcha();
   }
 
-  function onCaptchaSuccess() {}
-  function onCaptchaError() {}
-  function onCaptchaExpire() {}
-  function onCaptchaClose() {}
-  function onCaptchaReady() {}
+  // recaptcha
+  // const key = "6Ldvac0ZAAAAAFmtvwilkJ3MOD4IGou9KjhRglIo";
+  // let State = {
+  //   idle: "idle",
+  //   requesting: "requesting",
+  //   success: "success",
+  // };
+  // let token;
+  // let state = State.idle;
 
-  // function onSignIn(googleUser) {
-  //   var profile = googleUser.getBasicProfile();
-  //   console.log("ID: " + profile.getId()); // Do not send to your backend! Use an ID token instead.
-  //   console.log("Name: " + profile.getName());
-  //   console.log("Image URL: " + profile.getImageUrl());
-  //   console.log("Email: " + profile.getEmail()); // This is null if the 'email' scope is not present.
+  // function doRecaptcha() {
+  //   grecaptcha.ready(function () {
+  //     grecaptcha.execute(key, { action: "submit" }).then(function (t) {
+  //       state = State.success;
+  //       token = t;
+  //     });
+  //   });
+  // }
+
+  // function toggle() {
+  //   window.document.body.classList.toggle("dark-mode");
   // }
 </script>
+
+<!-- <svelte:head>
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+  <script src="https://www.google.com/recaptcha/api.js?render={key}" async defer></script>
+</svelte:head> -->
 
 <!-- {#await fetchImage}
   <p>...waiting</p>
@@ -41,62 +65,42 @@
   <p>An error occurred!</p>
 {/await} -->
 
+<!-- <div>state: {state}</div>
+token:<br />{token} -->
+
+<!-- <Styles />
+<Button color="primary">
+  Nice! <Icon name="emoji-smile-fill" />
+</Button>
+<button on:click={toggle}>
+  <slot />
+</button> -->
+
 <main>
   <h1>Todo App</h1>
   <div class="auth__form">
     <div class="form-group form-customize">
-      <label for="email">メールアドレス</label>
-      <input class="form-control" id="user_login" label="ユーザーIDまたはメールアドレス" name="user[login]" placeholder="メールアドレス" size="30" type="text" bind:value={mailAddress} />
+      <!-- <label for="email">メールアドレス</label>
+      <input class="form-control" id="user_login" label="ユーザーIDまたはメールアドレス" name="user[login]" placeholder="メールアドレス" size="30" type="text" bind:value={mailAddress} /> -->
+      <Textfield bind:value={mailAddress} label="メールアドレス">
+        <HelperText slot="helper">メールアドレスを入力して下さい</HelperText>
+      </Textfield>
     </div>
     <div class="form-group form-customize">
-      <label for="password">パスワード</label>
-      <input class="form-control" id="user_password" label="パスワード" name="user[password]" placeholder="パスワード" size="30" type="password" bind:value={password} />
+      <!-- <label for="password">パスワード</label>
+      <input class="form-control" id="user_password" label="パスワード" name="user[password]" placeholder="パスワード" size="30" type="password" bind:value={password} /> -->
+      <Textfield bind:value={password} label="パスワード">
+        <HelperText slot="helper">パスワードを入力して下さい</HelperText>
+      </Textfield>
     </div>
-    s
-    <Recaptcha sitekey={"googleRecaptchaSiteKey"} badge={"top"} size={"invisible"} on:success={onCaptchaSuccess} on:error={onCaptchaError} on:expired={onCaptchaExpire} on:close={onCaptchaClose} on:ready={onCaptchaReady} />
-    b
-    <!-- <noscript>
-      <div>
-        <div style="width: 302px; height: 422px; position: relative;">
-          <div style="width: 302px; height: 422px; position: absolute;">
-            <iframe src="https://www.google.com/recaptcha/api.js?hl=ja/fallback?k=6LfGBrMUAAAAAN_8yhR0mRG9o7S7c85YA6jE8fl_" scrolling="no" name="ReCAPTCHA" style="width: 302px; height: 422px; border-style: none; border: 0;" />
-          </div>
-        </div>
-        <div
-          style="width: 300px; height: 60px; border-style: none;
-                    bottom: 12px; left: 25px; margin: 0px; padding: 0px; right: 25px;
-                    background: #f9f9f9; border: 1px solid #c1c1c1; border-radius: 3px;"
-        >
-          <textarea
-            id="g-recaptcha-response"
-            name="g-recaptcha-response"
-            class="g-recaptcha-response"
-            style="width: 250px; height: 40px; border: 1px solid #c1c1c1;
-                      margin: 10px 25px; padding: 0px; resize: none;"
-          />
-        </div>
-      </div>
-    </noscript> -->
-
     <div class="auth__button-submit">
-      <button class="btn button button--primary button--large button--full" on:click={onSignIn}> ログイン </button>
+      <!-- <button class="btn button button--primary button--large button--full" on:click={onSignIn}> ログイン </button> -->
+      <Button on:click={onSignIn} variant="unelevated">
+        <Label>ログイン</Label>
+      </Button>
     </div>
-    <div class="text-center">
-      <a href="/auth/password/new" class="auth__note-linkable">パスワードをお忘れですか？</a>
-    </div>
-    <div class="auth__horizontal-line text-center">OR</div>
-    <!-- <div class="form-customize">
-        <a class="btn button button--google button--large button--full" href="/auth/auth/google_oauth2">
-          <span class="google-auth-icon" />
-          Googleでログイン
-        </a>
-        <div class="auth__note-unlinkable text-center">Googleでアカウント作成をした方</div>
-      </div> -->
-    <!-- <div class="g-signin2" data-onsuccess={onSignIn} /> -->
+    <div class="g-signin2" data-longtitle="true" data-onsuccess="onSignIn" />
   </div>
-  <pre>
-    {result}
-  </pre>
 </main>
 
 <style>
@@ -113,10 +117,4 @@
     font-size: 4em;
     font-weight: 100;
   }
-
-  /* @media (min-width: 640px) {
-    main {
-      max-width: none;
-    }
-  } */
 </style>

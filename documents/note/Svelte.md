@@ -2,3 +2,19 @@
 npx degit sveltejs/template frontend
 npm i
 npm run dev
+
+・recaptcha-v3
+https://codesandbox.io/s/gmlcl?file=/App.svelte
+
+・svelte-spa-router
+https://github.com/ItalyPaleAle/svelte-spa-router
+
+・cssフレームワーク
+Skeleton
+http://getskeleton.com/
+https://segakuin.com/css/skeleton/#INPUT-UFW
+https://zenn.dev/masaino/articles/a3b0eb46fd54f0
+https://blog.cntlog.net/archives/1398
+
+sveltestrap
+https://github.com/bestguy/sveltestrap
