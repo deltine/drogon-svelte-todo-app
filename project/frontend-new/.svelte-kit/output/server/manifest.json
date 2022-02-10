@@ -1,0 +1,102 @@
+{
+  ".svelte-kit/build/app.js": {
+    "file": "app.js",
+    "src": ".svelte-kit/build/app.js",
+    "isEntry": true,
+    "imports": [
+      "_index-dbf0e059.js"
+    ]
+  },
+  "src/routes/api/drogon.ts": {
+    "file": "entries/endpoints/api/drogon.ts.js",
+    "src": "src/routes/api/drogon.ts",
+    "isEntry": true,
+    "imports": [
+      "src/routes/api/util.ts"
+    ]
+  },
+  "src/routes/api/util.ts": {
+    "file": "entries/endpoints/api/util.ts.js",
+    "src": "src/routes/api/util.ts",
+    "isEntry": true
+  },
+  "src/routes/api/test1.ts": {
+    "file": "entries/endpoints/api/test1.ts.js",
+    "src": "src/routes/api/test1.ts",
+    "isEntry": true
+  },
+  "src/routes/api/test.ts": {
+    "file": "entries/endpoints/api/test.ts.js",
+    "src": "src/routes/api/test.ts",
+    "isEntry": true
+  },
+  "src/routes/__layout.svelte": {
+    "file": "entries/pages/__layout.svelte.js",
+    "src": "src/routes/__layout.svelte",
+    "isEntry": true,
+    "imports": [
+      "_index-dbf0e059.js"
+    ],
+    "css": [
+      "assets/entries/pages/__layout.svelte-21a3bdb5.css"
+    ]
+  },
+  "src/routes/__error.svelte": {
+    "file": "entries/pages/__error.svelte.js",
+    "src": "src/routes/__error.svelte",
+    "isEntry": true,
+    "imports": [
+      "_index-dbf0e059.js"
+    ]
+  },
+  "src/routes/index.svelte": {
+    "file": "entries/pages/index.svelte.js",
+    "src": "src/routes/index.svelte",
+    "isEntry": true,
+    "imports": [
+      "_index-dbf0e059.js",
+      "_nav-5cf152dc.js",
+      "_footer-88567eb4.js"
+    ]
+  },
+  "src/routes/about.svelte": {
+    "file": "entries/pages/about.svelte.js",
+    "src": "src/routes/about.svelte",
+    "isEntry": true,
+    "imports": [
+      "_index-dbf0e059.js",
+      "_nav-5cf152dc.js"
+    ],
+    "css": [
+      "assets/entries/pages/about.svelte-7b1aeeb4.css"
+    ]
+  },
+  "src/routes/todo/index.svelte": {
+    "file": "entries/pages/todo/index.svelte.js",
+    "src": "src/routes/todo/index.svelte",
+    "isEntry": true,
+    "imports": [
+      "_index-dbf0e059.js",
+      "_nav-5cf152dc.js",
+      "_footer-88567eb4.js"
+    ]
+  },
+  "_index-dbf0e059.js": {
+    "file": "chunks/index-dbf0e059.js"
+  },
+  "_nav-5cf152dc.js": {
+    "file": "chunks/nav-5cf152dc.js",
+    "imports": [
+      "_index-dbf0e059.js"
+    ],
+    "assets": [
+      "assets/svelte-logo-87df40b8.svg"
+    ]
+  },
+  "_footer-88567eb4.js": {
+    "file": "chunks/footer-88567eb4.js",
+    "imports": [
+      "_index-dbf0e059.js"
+    ]
+  }
+}

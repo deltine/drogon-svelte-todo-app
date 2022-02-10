@@ -1,0 +1,91 @@
+{
+  ".svelte-kit/runtime/client/start.js": {
+    "file": "start-329dedfe.js",
+    "src": ".svelte-kit/runtime/client/start.js",
+    "isEntry": true,
+    "imports": [
+      "_vendor-6d43d0bd.js"
+    ],
+    "dynamicImports": [
+      "src/routes/__layout.svelte",
+      "src/routes/__error.svelte",
+      "src/routes/index.svelte",
+      "src/routes/about.svelte",
+      "src/routes/todo/index.svelte"
+    ]
+  },
+  "src/routes/__layout.svelte": {
+    "file": "pages/__layout.svelte-51e9f1c8.js",
+    "src": "src/routes/__layout.svelte",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_vendor-6d43d0bd.js"
+    ],
+    "css": [
+      "assets/pages/__layout.svelte-98f8186c.css"
+    ]
+  },
+  "src/routes/__error.svelte": {
+    "file": "pages/__error.svelte-9d188d6c.js",
+    "src": "src/routes/__error.svelte",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_vendor-6d43d0bd.js"
+    ]
+  },
+  "src/routes/index.svelte": {
+    "file": "pages/index.svelte-854ba4a2.js",
+    "src": "src/routes/index.svelte",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_vendor-6d43d0bd.js",
+      "_nav-fbcab25d.js",
+      "_footer-2239251b.js"
+    ]
+  },
+  "src/routes/about.svelte": {
+    "file": "pages/about.svelte-4adb47ab.js",
+    "src": "src/routes/about.svelte",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_vendor-6d43d0bd.js",
+      "_nav-fbcab25d.js"
+    ],
+    "css": [
+      "assets/pages/about.svelte-91e1140c.css"
+    ]
+  },
+  "src/routes/todo/index.svelte": {
+    "file": "pages/todo/index.svelte-b8fa7cd4.js",
+    "src": "src/routes/todo/index.svelte",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_vendor-6d43d0bd.js",
+      "_nav-fbcab25d.js",
+      "_footer-2239251b.js"
+    ]
+  },
+  "_vendor-6d43d0bd.js": {
+    "file": "chunks/vendor-6d43d0bd.js"
+  },
+  "_nav-fbcab25d.js": {
+    "file": "chunks/nav-fbcab25d.js",
+    "imports": [
+      "_vendor-6d43d0bd.js"
+    ],
+    "assets": [
+      "assets/svelte-logo-87df40b8.svg"
+    ]
+  },
+  "_footer-2239251b.js": {
+    "file": "chunks/footer-2239251b.js",
+    "imports": [
+      "_vendor-6d43d0bd.js"
+    ]
+  }
+}
