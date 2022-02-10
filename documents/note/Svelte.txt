@@ -18,3 +18,15 @@ https://blog.cntlog.net/archives/1398
 
 sveltestrap
 https://github.com/bestguy/sveltestrap
+
+・sveltekit+tailwindcssのインストール
+npm init svelte@next my-awesome-app
+cd my-awesome-app
+npx svelte-add@latest tailwindcss
+npm i
+
+・Tailwind CSS IntelliSense 有効可
+settings.jsonに以下を追加
+    "tailwindCSS.includeLanguages": {
+        "svelte": "html"
+    }

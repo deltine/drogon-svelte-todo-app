@@ -16,11 +16,21 @@ RUN apt-get update -yqq \
     # postgresql-server-dev-all \
     libmariadbclient-dev \
     # libsqlite3-dev \
-    && npm install npx \
+    # && npm install npx \
+    # && npm install n -g \
+    # && n stable \
+    # && apt purge -y nodejs npm \
+    # && npm install -g npm@8.3.0 \
     && apt-get clean \
     && npm cache clean --force \
     && rm -rf /var/lib/apt/lists/* \
     && locale-gen ja_JP.utf8
+
+RUN npm install npx
+RUN npm install n -g
+RUN n stable
+RUN apt purge -y nodejs npm
+RUN npm install -g npm@8.3.0
 
 ENV LANG=ja_JP.utf8 \
     LANGUAGE=ja_JP:jp \

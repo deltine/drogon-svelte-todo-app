@@ -1,23 +1,23 @@
 /* This is a JSON format configuration file
  */
 {
-    /*
+    
     //ssl:The global SSL settings. "key" and "cert" are the path to the SSL key and certificate. While
     //    "conf" is an array of 1 or 2-element tuples that supplies file style options for `SSL_CONF_cmd`.
     "ssl": {
-        "cert": "../../trantor/trantor/tests/server.pem",
-        "key": "../../trantor/trantor/tests/server.pem",
-        "conf": [
-            //["Options", "-SessionTicket"], 
-            //["Options", "Compression"]
-        ]
+        "cert": "/install/drogon/trantor/trantor/tests/server.pem",
+        "key": "/install/drogon/trantor/trantor/tests/server.pem"
+        // "conf": [
+        //     ["Options", "Compression"], 
+        //     ["min_protocol", "TLSv1.2"]
+        // ]
     },
     // mime: A dictionary that extends the internal MIME type support. Maps extensions into new MIME types
     // note: This option only adds MIME to the sever. `file_types` above have to be set for the server to serve them.
-    "mime": {
-        // "text/markdown": "md",
-        // "text/gemini": ["gmi", "gemini"]
-    },
+    // "mime": {
+    //     // "text/markdown": "md",
+    //     // "text/gemini": ["gmi", "gemini"]
+    // },
     "listeners": [
         {
             //address: Ip address,0.0.0.0 by default
@@ -34,19 +34,49 @@
             //cert,key: Cert file path and key file path, empty by default,
             //if empty, use the global setting
             "cert": "",
-            "key": "",
+            "key": ""
             //use_old_tls: enable the TLS1.0/1.1, false by default
-            "use_old_tls": false,
-            "ssl_conf": [
-                //["MinProtocol", "TLSv1.3"]
-            ]
+            // "use_old_tls": false,
+            // "ssl_conf": [
+            //     //["MinProtocol", "TLSv1.3"]
+            // ]
         }
     ],
-    */
+    
     "db_clients": [
         {
             //name: Name of the client,'default' by default
             //"name":"",
+            //rdbms: Server type, postgresql,mysql or sqlite3, "postgresql" by default
+            "rdbms": "mysql",
+            //filename: Sqlite3 db file name
+            //"filename":"",
+            //host: Server address,localhost by default
+            "host": "db",
+            //port: Server port, 5432 by default
+            "port": 3306,
+            //dbname: Database name
+            "dbname": "mydb",
+            //user: 'postgres' by default
+            "user": "root",
+            //passwd: '' by default
+            "passwd": "password",
+            //is_fast: false by default, if it is true, the client is faster but user can't call
+            //any synchronous interface of it.
+            "is_fast": false,
+            //client_encoding: The character set used by the client. it is empty string by default which 
+            //means use the default character set.
+            //"client_encoding": "",
+            //number_of_connections: 1 by default, if the 'is_fast' is true, the number is the number of  
+            //connections per IO thread, otherwise it is the total number of all connections.  
+            "number_of_connections": 1,
+            //timeout: -1.0 by default, in seconds, the timeout for executing a SQL query.
+            //zero or negative value means no timeout.
+            "timeout": -1.0
+        },
+        {
+            //name: Name of the client,'default' by default
+            "name":"fast",
             //rdbms: Server type, postgresql,mysql or sqlite3, "postgresql" by default
             "rdbms": "mysql",
             //filename: Sqlite3 db file name
@@ -105,7 +135,7 @@
         "number_of_threads": 1,
         //enable_session: False by default
         "enable_session": true,
-        "session_timeout": 0,
+        "session_timeout": 1200,
         //document_root: Root path of HTTP document, defaut path is ./
         "document_root": "./",
         //home_page: Set the HTML file of the home page, the default value is "index.html"
@@ -155,6 +185,7 @@
                 //default_content_type: The default content type of the static files without
                 //an extension. empty string by default.
                 "default_content_type": "text/plain",
+                // "default_content_type": "application/json",
                 //alias: The location in file system, if it is prefixed with "/", it 
                 //presents an absolute path, otherwise it presents a relative path to 
                 //the document_root path. 

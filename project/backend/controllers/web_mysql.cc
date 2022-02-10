@@ -53,11 +53,11 @@ void Mysql::selectA(const HttpRequestPtr &req,
 
     if (!*_dbClient)
     {
-        *_dbClient = drogon::app().getFastDbClient();
+        *_dbClient = drogon::app().getFastDbClient("fast");
     }
     drogon::orm::Mapper<Account> mapper(*_dbClient);
 
-    auto db = drogon::app().getFastDbClient();
+    auto db = drogon::app().getFastDbClient("fast");
 
     for (int i = 0; i < queries; i++)
     {
@@ -510,7 +510,7 @@ void Mysql::tran(const HttpRequestPtr &req,
     // auto callbackPtr =
     //     std::make_shared<std::function<void(const HttpResponsePtr &)>>(
     //         std::move(callback));
-
+    auto a = clientPtr->newTransactionCoro();
     clientPtr->newTransactionAsync(
         [=, this](const std::shared_ptr<Transaction> &tran)
         {

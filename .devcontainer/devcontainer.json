@@ -29,6 +29,12 @@
 		"RafaelMartinez.svelte-preview",
 		"pivaszbs.svelte-autoimport",
 		"technosophos.vscode-make",
+		"esbenp.prettier-vscode",
+		"csstools.postcss",
+		"bradlc.vscode-tailwindcss",
+		"CoenraadS.bracket-pair-colorizer-2",
+		"vincaslt.highlight-matching-tag",
+		"yzhang.markdown-all-in-one",
 	]
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
