@@ -1,0 +1,67 @@
+sequelize
+https://sequelize.org/master/manual/getting-started.html
+https://qiita.com/mima_ita/items/014dcb42872f3a10855b
+https://tositeru.github.io/Notebook/js/sequelize.html
+
+npm install --save sequelize
+npm install --save-dev sequelize-cli
+npm install --save mysql2
+
+初期化
+npx sequelize-cli init
+モデルの作成
+npx sequelize-cli model:generate --name Account --attributes AccountId:integer,AccountName:string,MailAddress:string,Password:string,CreatedAt:date,UpdatedAt:date
+マイグレーションの実行
+npx sequelize-cli db:migrate --env development
+マイグレーションの取り消し
+npx sequelize-cli db:migrate:undo
+
+生SQLも流せる
+sequelize.query('SELECT * FROM Data', options)
+  .then(rows => console.log(rows))
+
+
+
+
+
+
+
+
+https://db-migrate.readthedocs.io/en/latest/Getting%20Started/commands/
+
+npm install db-migrate
+npm install db-migrate-mysql
+npm install --force db-migrate-plugin-typescript
+
+database.json作成
+{
+  "defaultEnv": "dev",
+  "dev": {
+    "host": "db",
+    "driver": "mysql",
+    "database": "mydb",
+    "user": "root",
+    "password": "password",
+    "multipleStatements": true
+  }
+  ,"other": "sh"
+}
+
+.db-migraterc作成
+{
+  "sql-file": false,
+  "configFile": "./database.json",
+  "table": "ex_table"
+}
+
+コマンド
+db-migrate up -c 5
+db-migrate up 20220129011108-test
+db-migrate up --config config/database.json -e dev
+db-migrate down -c 5
+db-migrate reset
+db-migrate create migrationname
+db-migrate create anothermigration --coffee-file
+db-migrate create anothermigration --sql-file
+db-migrate db:create testDB
+db-migrate db:drop testDB

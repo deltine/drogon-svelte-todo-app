@@ -47,6 +47,8 @@ class Account
         static const std::string _account_name;
         static const std::string _mail_address;
         static const std::string _password;
+        static const std::string _created_at;
+        static const std::string _updated_at;
     };
 
     const static int primaryKeyNumber;
@@ -136,8 +138,26 @@ class Account
     void setPassword(std::string &&pPassword) noexcept;
     void setPasswordToNull() noexcept;
 
+    /**  For column created_at  */
+    ///Get the value of the column created_at, returns the default value if the column is null
+    const ::trantor::Date &getValueOfCreatedAt() const noexcept;
+    ///Return a shared_ptr object pointing to the column const value, or an empty shared_ptr object if the column is null
+    const std::shared_ptr<::trantor::Date> &getCreatedAt() const noexcept;
+    ///Set the value of the column created_at
+    void setCreatedAt(const ::trantor::Date &pCreatedAt) noexcept;
+    void setCreatedAtToNull() noexcept;
 
-    static size_t getColumnNumber() noexcept {  return 4;  }
+    /**  For column updated_at  */
+    ///Get the value of the column updated_at, returns the default value if the column is null
+    const ::trantor::Date &getValueOfUpdatedAt() const noexcept;
+    ///Return a shared_ptr object pointing to the column const value, or an empty shared_ptr object if the column is null
+    const std::shared_ptr<::trantor::Date> &getUpdatedAt() const noexcept;
+    ///Set the value of the column updated_at
+    void setUpdatedAt(const ::trantor::Date &pUpdatedAt) noexcept;
+    void setUpdatedAtToNull() noexcept;
+
+
+    static size_t getColumnNumber() noexcept {  return 6;  }
     static const std::string &getColumnName(size_t index) noexcept(false);
 
     Json::Value toJson() const;
@@ -161,6 +181,8 @@ class Account
     std::shared_ptr<std::string> accountName_;
     std::shared_ptr<std::string> mailAddress_;
     std::shared_ptr<std::string> password_;
+    std::shared_ptr<::trantor::Date> createdAt_;
+    std::shared_ptr<::trantor::Date> updatedAt_;
     struct MetaData
     {
         const std::string colName_;
@@ -172,7 +194,7 @@ class Account
         const bool notNull_;
     };
     static const std::vector<MetaData> metaData_;
-    bool dirtyFlag_[4]={ false };
+    bool dirtyFlag_[6]={ false };
   public:
     static const std::string &sqlForFindingByPrimaryKey()
     {
@@ -207,6 +229,16 @@ class Account
             sql += "password,";
             ++parametersCount;
         }
+        if(dirtyFlag_[4])
+        {
+            sql += "created_at,";
+            ++parametersCount;
+        }
+        if(dirtyFlag_[5])
+        {
+            sql += "updated_at,";
+            ++parametersCount;
+        }
         needSelection=true;
         if(parametersCount > 0)
         {
@@ -228,6 +260,16 @@ class Account
 
         }
         if(dirtyFlag_[3])
+        {
+            sql.append("?,");
+
+        }
+        if(dirtyFlag_[4])
+        {
+            sql.append("?,");
+
+        }
+        if(dirtyFlag_[5])
         {
             sql.append("?,");
 

@@ -1,0 +1,12 @@
+{
+  "defaultEnv": "dev",
+  "dev": {
+    "host": "db",
+    "driver": "mysql",
+    "database": "mydb",
+    "user": "root",
+    "password": "password",
+    "multipleStatements": true
+  }
+  ,"other": "sh"
+}

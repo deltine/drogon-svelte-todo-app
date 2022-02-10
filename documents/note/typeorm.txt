@@ -1,0 +1,6 @@
+インストール
+npm install mongoose --save
+npm i -g typeorm
+
+初期化
+typeorm init

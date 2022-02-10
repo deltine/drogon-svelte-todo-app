@@ -1,0 +1,12 @@
+オレオレ証明書作成手順
+https://qiita.com/ll_kuma_ll/items/13c962a6a74874af39c6
+
+openssl genrsa -aes256 -out /workspace/openssl/cakey.pem 2048
+password
+openssl req -new -key /workspace/openssl/cakey.pem -out /workspace/openssl/cacert.csr
+openssl x509 -days 3650 -in /workspace/openssl/cacert.csr -req -signkey /workspace/openssl/cakey.pem -out /workspace/openssl/cacert.pem
+
+ドメイン
+localhost-test01.ddo.jp
+
+docker run -it –rm –name certbot -v “/var/www/html:/var/www/html” -v “/openssl/letsencrypt:/etc/letsencrypt” -v “/var/lib/letsencrypt:/var/lib/letsencrypt” certbot/certbot certonly –agree-tos –webroot -w /var/www/html -d "localhost-test01.ddo.jp"
